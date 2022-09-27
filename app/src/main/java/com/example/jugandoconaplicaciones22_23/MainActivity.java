@@ -1,5 +1,6 @@
 package com.example.jugandoconaplicaciones22_23;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -13,8 +14,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     public static final String NOMBRE = "NOMBRE";
+    private static final int CODIGO_IDENTIFICACION_SALUDO = 10;
     Button buttonLanzar;
     EditText editTextNombre;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CODIGO_IDENTIFICACION_SALUDO  && resultCode == RESULT_OK){
+            String numero = data.getStringExtra(SaludoActivity.NUMERO);
+            editTextNombre.setText(editTextNombre.getText()+ " "+ numero);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +41,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                Intent intento = new Intent(MainActivity.this, SaludoActivity.class);
                intento.putExtra(NOMBRE, editTextNombre.getText().toString() );
-               startActivity(intento); //Lanza la actividad
+               //startActivity(intento); //Lanza la actividad
+
+                startActivityForResult(intento, CODIGO_IDENTIFICACION_SALUDO);
+
             }
         });
     }
